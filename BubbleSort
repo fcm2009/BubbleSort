@@ -1,0 +1,18 @@
+################################data################################
+.data
+Array: .word 10, 2, 0, 15, 25, 30, 7, 22
+Array_end .byte
+####################################################################
+.globl main
+.data
+	main:
+		la $s0, arr			#get address of Array
+		la $t0, Array_end		#get address of the end  of Array
+		subu $s1, $t0, s0 		#get size of Array
+		
+		add $t0, $s0, $zero		#initialize a pointer on Array beginning
+		
+		li $v0, 1
+		print_array:
+			lw $t1, 0(
+			add $a0, 
