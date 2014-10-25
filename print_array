@@ -1,0 +1,20 @@
+.macro print_array
+
+
+add $t0, $s0, $zero			#initialize a pointer on Array beginning
+li $t1, 0				#initialize an index
+
+print_array:
+			li $v0, 1			#prepare to print an integer
+			lw $a0, 0($t0)			#git element from Array
+			syscall				#print element
+			
+			li $v0, 11			#prepare to print a character
+			li $a0, ' '			#print space
+			syscall				#print space
+			
+			addiu $t0, $t0, 4		#increment pointer to next element in Array
+			addiu $t1, $t1, 1		#increment index by 1
+			
+			blt $t1, $s1, print_array	#if index less than the size of Array loop again else break
+.end_macro

@@ -1,18 +1,53 @@
+################################imports#############################
+.include "print_array"
 ################################data################################
 .data
-Array: .word 10, 2, 0, 15, 25, 30, 7, 22
-Array_end .byte
+Array:		.word 10, 2, 0, 15, 25, 30, 7, 22
+Array_end:	.byte
 ####################################################################
 .globl main
-.data
+.text
 	main:
-		la $s0, arr			#get address of Array
-		la $t0, Array_end		#get address of the end  of Array
-		subu $s1, $t0, s0 		#get size of Array
+		la $s0, Array				#get address of Array
+		la $t0, Array_end			#get address of the end  of Array
+		sub $s1, $t0, $s0
+		srl $s1, $s1, 2				#get size of Array
 		
-		add $t0, $s0, $zero		#initialize a pointer on Array beginning
+		print_array
 		
-		li $v0, 1
-		print_array:
-			lw $t1, 0(
-			add $a0, 
+		
+		add $t0, $s0, $zero			#initialize a pointer on Array beginning
+		add $t3, $s0, $zero			#initialize a pointer on Array beginning
+		add $t1, $s1, $zero			#initialize an index i
+		add $t2, $s1, $zero			#initialize an index j = Array size
+		subiu $t1, $t1, 1
+		subiu $t2, $t2, 1
+		
+		
+		sort_array:
+			lw $a1, 0($t3)
+			inner_sort:
+				addiu $t0, $t0, 4	#increment pointer to next element in Array
+				lw $a2, 0($t0)
+				bgt $a1, $a2, swap
+			return:
+				subiu $t2, $t2, 1
+				bgez $t2, inner_sort
+		
+		subiu $t1, $t1, 1
+		add $t2, $t1, $zero
+		add $t0, $s0, $zero
+		bnez $t1, sort_array		
+		
+		
+				
+		swap:
+			sw $a2, 0($t3)
+			sw $a1, 0($t0)
+			add $t3, $t0, $zero
+			
+			j return
+				
+				
+				
+			
