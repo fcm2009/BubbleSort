@@ -1,8 +1,8 @@
 .macro print_array
 
 
-add $t0, $s0, $zero			#initialize a pointer on Array beginning
-li $t1, 0				#initialize an index
+add $t0, $s0, $zero					#initialize a pointer on Array beginning
+li $t1, 0						#initialize an index
 
 print_array:
 			li $v0, 1			#prepare to print an integer

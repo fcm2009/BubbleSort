@@ -1,0 +1,20 @@
+.macro inner_sort
+
+	inner_sort:
+		lw $a1, 0($t0)			#load elemnt that pointer is pointing to
+		lw $a2, 4($t0)			#load next elemnt
+		bgt $a1, $a2, swap		#compare: if first element > next element swap, else continue
+		return:
+		addiu $t0, $t0, 4		#move pointer to next elemnt
+		subiu $t3, $t3, 1		#decrement j by 1
+		bgtz $t3, inner_sort		#if j > 0 loop again, else break
+		
+		j end
+				
+		swap:
+			sw $a2, 0($t0)		#stor second element in the place of the first
+			sw $a1, 4($t0)		#stor first element in the place of the second
+			j return		#return to main flow
+			
+		end:
+.end_macro

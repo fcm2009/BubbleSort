@@ -1,0 +1,6 @@
+.macro print_new_line	
+	
+	li $v0, 11			#prepare to print char
+	li $a0, '\n'			#load new line char
+	syscall				#print new line char
+.end_macro

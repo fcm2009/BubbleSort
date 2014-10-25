@@ -1,9 +1,13 @@
 ################################imports#############################
 .include "print_array"
+.include "inner_sort"
+.include "print_new_line"
 ################################data################################
 .data
-Array:		.word 10, 2, 0, 15, 25, 30, 7, 22
-Array_end:	.byte
+Array:			.word 	-5, 4, -6, 6, -11, 11, 46, 47, 84, -84, 1, 0
+Array_end:		.byte
+before_str:		.asciiz	"Array before sorting is: "
+after_str:		.asciiz	"Array after sorting is: "
 ####################################################################
 .globl main
 .text
@@ -13,40 +17,34 @@ Array_end:	.byte
 		sub $s1, $t0, $s0
 		srl $s1, $s1, 2				#get size of Array
 		
-		print_array
+		li $v0, 4				#prepare to print string
+		la $a0, before_str			#load sring
+		syscall					#print string
+		print_array				#print Array
+		print_new_line				#print new line
 		
 		
-		add $t0, $s0, $zero			#initialize a pointer on Array beginning
-		add $t3, $s0, $zero			#initialize a pointer on Array beginning
-		add $t1, $s1, $zero			#initialize an index i
-		add $t2, $s1, $zero			#initialize an index j = Array size
-		subiu $t1, $t1, 1
-		subiu $t2, $t2, 1
+		add $t0, $s0, $zero			#initialize pointer on the beginning of Array
+		add $t2, $s1, $zero			#initialize an index i = Array size
+		add $t3, $s1, $zero			#initialize an index j = Array size
+		subiu $t2, $t2, 1			#decrement i by 1			
+		subiu $t3, $t3, 1			#decrement j by 1
 		
-		
-		sort_array:
-			lw $a1, 0($t3)
-			inner_sort:
-				addiu $t0, $t0, 4	#increment pointer to next element in Array
-				lw $a2, 0($t0)
-				bgt $a1, $a2, swap
-			return:
-				subiu $t2, $t2, 1
-				bgez $t2, inner_sort
-		
-		subiu $t1, $t1, 1
-		add $t2, $t1, $zero
-		add $t0, $s0, $zero
-		bnez $t1, sort_array		
-		
-		
-				
-		swap:
-			sw $a2, 0($t3)
-			sw $a1, 0($t0)
-			add $t3, $t0, $zero
+		sort_array:	
+			inner_sort			#first sort loop
 			
-			j return
+				
+		add $t0, $s0, $zero			#set pointer to the beginning of Array
+		subiu $t2, $t2, 1			#decrement i by 1
+		add $t3, $t2, $zero			#j = i
+		bgtz $t2, sort_array
+		
+		li $v0, 4				#prepare to print string
+		la $a0, after_str			#load sring
+		syscall					#print Array
+		print_array				#print new line
+				
+		
 				
 				
 				
